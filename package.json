@@ -1,7 +1,7 @@
 {
-  "name": "express-typescript-boilerplate",
+  "name": "computing-theory-forge-backend",
   "version": "1.0.1",
-  "description": "An Express boilerplate backend",
+  "description": "Backend for the Computing Theory Forge project",
   "main": "index.ts",
   "private": true,
   "scripts": {
@@ -65,7 +65,7 @@
     "**/*": "npm run format",
     "**/*.{js,ts}": "npm run lint:fix"
   },
-  "author": "Edwin Hernandez",
-  "repository": "edwinhern/express-typescript-2024",
+  "author": "FelipeESchmidt",
+  "repository": "FelipeESchmidt/computing-theory-forge-backend",
   "license": "ISC"
 }
