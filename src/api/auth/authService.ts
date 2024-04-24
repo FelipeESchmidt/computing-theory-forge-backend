@@ -34,7 +34,10 @@ export const authService = {
       if (!passwordMatch) {
         return new ServiceResponse(ResponseStatus.Failed, 'Passwords do not match', null, StatusCodes.BAD_REQUEST);
       }
-      await authRepository.registerAsync(register);
+      const isSuccessful = await authRepository.registerAsync(register);
+      if (!isSuccessful) {
+        throw new Error('Registration failed');
+      }
       return new ServiceResponse(ResponseStatus.Success, 'Registration successful', null, StatusCodes.CREATED);
     } catch (ex) {
       const errorMessage = `Error registering: ${(ex as Error).message}`;
