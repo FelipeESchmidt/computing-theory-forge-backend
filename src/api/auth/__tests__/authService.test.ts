@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import { Mock } from 'vitest';
 
-import { Auth } from '@/api/auth/authModel';
+import { Auth, Register } from '@/api/auth/authModel';
 import { authRepository } from '@/api/auth/authRepository';
 import { authService } from '@/api/auth/authService';
 import { extractToken } from '@/common/token/extract';
@@ -18,6 +18,12 @@ describe('authService', () => {
   const mockAuth: Auth = {
     email: 'email@email.com',
     password: 'password',
+  };
+
+  const mockRegister: Register = {
+    email: 'user1@user.com',
+    password: 'P3R#35J8t8g4',
+    passwordConfirmation: 'P3R#35J8t8g4',
   };
 
   afterAll(() => {
@@ -68,6 +74,78 @@ describe('authService', () => {
       expect(result.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
       expect(result.success).toBeFalsy();
       expect(result.message).toContain('Error logging in');
+    });
+  });
+
+  describe('register', () => {
+    it('should return token when registration is successful', async () => {
+      // Arrange
+      (authRepository.registerAsync as Mock).mockReturnValue(true);
+
+      // Act
+      const result = await authService.register(mockRegister);
+
+      // Assert
+      expect(result.statusCode).toEqual(StatusCodes.CREATED);
+      expect(result.success).toBeTruthy();
+      expect(result.message).toContain('Registration successful');
+    });
+
+    it('should return error when registration fails', async () => {
+      // Arrange
+      (authRepository.registerAsync as Mock).mockReturnValue(false);
+
+      // Act
+      const result = await authService.register(mockRegister);
+
+      // Assert
+      expect(result.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
+      expect(result.success).toBeFalsy();
+      expect(result.message).toContain('Registration failed');
+    });
+
+    it('should return error when an exception is thrown', async () => {
+      // Arrange
+      (authRepository.registerAsync as Mock).mockImplementation(() => {
+        throw new Error('Test error');
+      });
+
+      // Act
+      const result = await authService.register(mockRegister);
+
+      // Assert
+      expect(result.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
+      expect(result.success).toBeFalsy();
+      expect(result.message).toContain('Error registering');
+    });
+
+    it('should return error when email already exists', async () => {
+      // Arrange
+      (authRepository.verifyEmailAlreadyExistsAsync as Mock).mockReturnValue(true);
+
+      // Act
+      const result = await authService.register(mockRegister);
+
+      // Assert
+      expect(result.statusCode).toEqual(StatusCodes.CONFLICT);
+      expect(result.success).toBeFalsy();
+      expect(result.message).toContain('Email already exists');
+    });
+
+    it('should return error when passwords do not match', async () => {
+      // Arrange
+      (authRepository.verifyEmailAlreadyExistsAsync as Mock).mockReturnValue(false);
+
+      // Act
+      const result = await authService.register({
+        ...mockRegister,
+        passwordConfirmation: 'wrongPassword',
+      });
+
+      // Assert
+      expect(result.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+      expect(result.success).toBeFalsy();
+      expect(result.message).toContain('Passwords do not match');
     });
   });
 });

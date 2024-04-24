@@ -2,7 +2,7 @@ import { Mock } from 'vitest';
 import { StatusCodes } from 'http-status-codes';
 import request from 'supertest';
 
-import { Auth } from '@/api/auth/authModel';
+import { Auth, Register } from '@/api/auth/authModel';
 import { ServiceResponse } from '@/common/models/serviceResponse';
 import { authRepository } from '@/api/auth/authRepository';
 import { app } from '@/server';
@@ -13,6 +13,12 @@ describe('Auth API Endpoints', () => {
   const mockAuth: Auth = {
     email: 'email@email.com',
     password: 'password',
+  };
+
+  const mockRegister: Register = {
+    email: 'user1@user.com',
+    password: 'P3R#35J8t8g4',
+    passwordConfirmation: 'P3R#35J8t8g4',
   };
 
   afterAll(() => {
@@ -79,6 +85,81 @@ describe('Auth API Endpoints', () => {
       expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
       expect(responseBody.success).toBeFalsy();
       expect(responseBody.message).toContain('Invalid email');
+    });
+  });
+
+  describe('POST /auth/register', () => {
+    it('should be able to register', async () => {
+      // Arrange
+      (authRepository.verifyEmailAlreadyExistsAsync as Mock).mockReturnValue(false);
+      (authRepository.registerAsync as Mock).mockReturnValue(true);
+
+      // Act
+      const response = await request(app)
+        .post('/auth/register')
+        .send(mockRegister)
+        .set('Content-Type', 'application/json');
+      const responseBody: ServiceResponse<Register> = response.body;
+
+      // Assert
+      expect(response.statusCode).toEqual(StatusCodes.CREATED);
+      expect(responseBody.success).toBeTruthy();
+      expect(responseBody.message).toContain('Registration successful');
+    });
+
+    it('should return error when email already exists', async () => {
+      // Arrange
+      (authRepository.verifyEmailAlreadyExistsAsync as Mock).mockReturnValue(true);
+
+      // Act
+      const response = await request(app)
+        .post('/auth/register')
+        .send(mockRegister)
+        .set('Content-Type', 'application/json');
+      const responseBody: ServiceResponse<Register> = response.body;
+
+      // Assert
+      expect(response.statusCode).toEqual(StatusCodes.CONFLICT);
+      expect(responseBody.success).toBeFalsy();
+      expect(responseBody.message).toContain('Email already exists');
+    });
+
+    it('should return error when passwords do not match', async () => {
+      // Arrange
+      const register: Register = {
+        ...mockRegister,
+        passwordConfirmation: 'WrongButV@l1d',
+      };
+
+      // Act
+      const response = await request(app).post('/auth/register').send(register).set('Content-Type', 'application/json');
+
+      const responseBody: ServiceResponse<Register> = response.body;
+
+      // Assert
+      expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+      expect(responseBody.success).toBeFalsy();
+      expect(responseBody.message).toContain('Passwords do not match');
+    });
+
+    it('should return error when password is weak', async () => {
+      // Arrange
+      const register: Register = {
+        ...mockRegister,
+        password: 'weakpassword',
+        passwordConfirmation: 'weakpassword',
+      };
+
+      // Act
+      const response = await request(app).post('/auth/register').send(register).set('Content-Type', 'application/json');
+
+      const responseBody: ServiceResponse<Register> = response.body;
+
+      // Assert
+      expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+      expect(responseBody.success).toBeFalsy();
+      expect(responseBody.message).toContain('Password must contain at least one uppercase letter');
+      expect(responseBody.message).toContain('Password must contain at least one special character');
     });
   });
 });
