@@ -1,9 +1,10 @@
 import { StatusCodes } from 'http-status-codes';
 
+import { logger } from '@/server';
 import { Auth } from '@/api/auth/authModel';
 import { authRepository } from '@/api/auth/authRepository';
 import { ResponseStatus, ServiceResponse } from '@/common/models/serviceResponse';
-import { logger } from '@/server';
+import { generateToken } from '@/common/token/generate';
 
 type AuthResponse = { token: string };
 
@@ -15,7 +16,7 @@ export const authService = {
       if (!isValid) {
         return new ServiceResponse(ResponseStatus.Failed, 'Invalid credentials', null, StatusCodes.UNAUTHORIZED);
       }
-      const token = await authRepository.generateToken(auth);
+      const token = generateToken(auth);
       return new ServiceResponse<AuthResponse>(ResponseStatus.Success, 'Login successful', { token }, StatusCodes.OK);
     } catch (ex) {
       const errorMessage = `Error logging in: ${(ex as Error).message}`;
