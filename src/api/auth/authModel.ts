@@ -1,6 +1,7 @@
-import { commonValidations } from '@/common/utils/commonValidation';
 import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
 import { z } from 'zod';
+
+import { commonValidations } from '@/common/utils/commonValidation';
 
 extendZodWithOpenApi(z);
 
@@ -21,12 +22,14 @@ export const PostLoginSchema = z.object({
 export type Register = z.infer<typeof RegisterSchema>;
 export const RegisterSchema = z.object({
   ...AuthSchema.shape,
+  name: z.string(),
   passwordConfirmation: z.string(),
 });
 
 // Input Validation for 'POST /auth/register' endpoint
 export const PostRegisterSchema = z.object({
   body: z.object({
+    name: RegisterSchema.shape.name,
     email: AuthSchema.shape.email,
     password: commonValidations.password,
     passwordConfirmation: commonValidations.password,

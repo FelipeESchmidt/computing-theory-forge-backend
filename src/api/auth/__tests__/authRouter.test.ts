@@ -1,10 +1,10 @@
-import { Mock } from 'vitest';
 import { StatusCodes } from 'http-status-codes';
 import request from 'supertest';
+import { Mock } from 'vitest';
 
 import { Auth, Register } from '@/api/auth/authModel';
-import { ServiceResponse } from '@/common/models/serviceResponse';
 import { authRepository } from '@/api/auth/authRepository';
+import { ServiceResponse } from '@/common/models/serviceResponse';
 import { app } from '@/server';
 
 vi.mock('@/api/auth/authRepository');
@@ -16,6 +16,7 @@ describe('Auth API Endpoints', () => {
   };
 
   const mockRegister: Register = {
+    name: 'User 1',
     email: 'user1@user.com',
     password: 'P3R#35J8t8g4',
     passwordConfirmation: 'P3R#35J8t8g4',

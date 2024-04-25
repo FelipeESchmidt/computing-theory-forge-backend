@@ -21,6 +21,7 @@ describe('authService', () => {
   };
 
   const mockRegister: Register = {
+    name: 'User 1',
     email: 'user1@user.com',
     password: 'P3R#35J8t8g4',
     passwordConfirmation: 'P3R#35J8t8g4',
