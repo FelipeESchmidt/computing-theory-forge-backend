@@ -1,10 +1,11 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { logger } from '@/server';
 import { Auth, Register } from '@/api/auth/authModel';
 import { authRepository } from '@/api/auth/authRepository';
+import { encryptPassword } from '@/common/crypto';
 import { ResponseStatus, ServiceResponse } from '@/common/models/serviceResponse';
 import { generateToken } from '@/common/token/generate';
+import { logger } from '@/server';
 
 type AuthResponse = { token: string };
 
@@ -12,7 +13,8 @@ export const authService = {
   // Validates the user's credentials
   login: async (auth: Auth): Promise<ServiceResponse<AuthResponse | null>> => {
     try {
-      const isValid = await authRepository.loginAsync(auth);
+      const passwordDecrypted = encryptPassword(auth.password);
+      const isValid = await authRepository.loginAsync({ ...auth, password: passwordDecrypted });
       if (!isValid) {
         return new ServiceResponse(ResponseStatus.Failed, 'Invalid credentials', null, StatusCodes.UNAUTHORIZED);
       }
@@ -34,7 +36,8 @@ export const authService = {
       if (!passwordMatch) {
         return new ServiceResponse(ResponseStatus.Failed, 'Passwords do not match', null, StatusCodes.BAD_REQUEST);
       }
-      const isSuccessful = await authRepository.registerAsync(register);
+      const passwordEncrypted = encryptPassword(register.password);
+      const isSuccessful = await authRepository.registerAsync({ ...register, password: passwordEncrypted });
       if (!isSuccessful) {
         throw new Error('Registration failed');
       }
