@@ -1,4 +1,5 @@
 import { env } from '@/common/utils/envConfig';
+import connection from '@/database/connection';
 import { app, logger } from '@/server';
 
 const server = app.listen(env.PORT, () => {
@@ -7,6 +8,9 @@ const server = app.listen(env.PORT, () => {
 });
 
 const onCloseSignal = () => {
+  connection.end(() => {
+    console.log('Server disconnected from database');
+  });
   logger.info('sigint received, shutting down');
   server.close(() => {
     logger.info('server closed');
