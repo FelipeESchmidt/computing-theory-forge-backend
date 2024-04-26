@@ -31,3 +31,15 @@ export const executeInsertQuery = (query: string, params: any[] = []): Promise<I
     });
   });
 };
+
+export const executeUpdateQuery = (query: string, params: any[] = []): Promise<number> => {
+  return new Promise((resolve, reject) => {
+    connection.query(query, params, (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(results.affectedRows);
+      }
+    });
+  });
+};
