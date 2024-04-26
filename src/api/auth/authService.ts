@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { Auth, Register } from '@/api/auth/authModel';
+import { Auth, Register, Update } from '@/api/auth/authModel';
 import { authRepository } from '@/api/auth/authRepository';
 import { encryptPassword } from '@/common/crypto';
 import { ResponseStatus, ServiceResponse } from '@/common/models/serviceResponse';
@@ -13,12 +13,12 @@ export const authService = {
   // Validates the user's credentials
   login: async (auth: Auth): Promise<ServiceResponse<AuthResponse | null>> => {
     try {
-      const passwordDecrypted = encryptPassword(auth.password);
-      const isValid = await authRepository.loginAsync({ ...auth, password: passwordDecrypted });
+      const passwordEncrypted = encryptPassword(auth.password);
+      const isValid = await authRepository.loginAsync({ ...auth, password: passwordEncrypted });
       if (!isValid) {
         return new ServiceResponse(ResponseStatus.Failed, 'Invalid credentials', null, StatusCodes.UNAUTHORIZED);
       }
-      const token = generateToken(auth);
+      const token = generateToken({ email: auth.email });
       return new ServiceResponse<AuthResponse>(ResponseStatus.Success, 'Login successful', { token }, StatusCodes.OK);
     } catch (ex) {
       const errorMessage = `Error logging in: ${(ex as Error).message}`;
@@ -44,6 +44,29 @@ export const authService = {
       return new ServiceResponse(ResponseStatus.Success, 'Registration successful', null, StatusCodes.CREATED);
     } catch (ex) {
       const errorMessage = `Error registering: ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  },
+  update: async (update: Update, email: string): Promise<ServiceResponse<null>> => {
+    try {
+      const passwordEncrypted = encryptPassword(update.password);
+      const isValid = await authRepository.loginAsync({ email, password: passwordEncrypted });
+      if (!isValid) {
+        return new ServiceResponse(ResponseStatus.Failed, 'Password is invalid', null, StatusCodes.UNAUTHORIZED);
+      }
+      const passwordMatch = update.newPassword === update.newPasswordConfirmation;
+      if (!passwordMatch) {
+        return new ServiceResponse(ResponseStatus.Failed, 'Passwords do not match', null, StatusCodes.BAD_REQUEST);
+      }
+      const newPasswordEncrypted = encryptPassword(update.newPassword);
+      const isSuccessful = await authRepository.updateAsync({ ...update, password: newPasswordEncrypted }, email);
+      if (!isSuccessful) {
+        throw new Error('Update failed');
+      }
+      return new ServiceResponse(ResponseStatus.Success, 'Update successful', null, StatusCodes.OK);
+    } catch (ex) {
+      const errorMessage = `Error updating: ${(ex as Error).message}`;
       logger.error(errorMessage);
       return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
