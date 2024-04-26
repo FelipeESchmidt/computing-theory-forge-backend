@@ -2,12 +2,14 @@ import { StatusCodes } from 'http-status-codes';
 import request from 'supertest';
 import { Mock } from 'vitest';
 
-import { Auth, Register } from '@/api/auth/authModel';
+import { Auth, Register, Update } from '@/api/auth/authModel';
 import { authRepository } from '@/api/auth/authRepository';
 import { ServiceResponse } from '@/common/models/serviceResponse';
+import { verifyToken } from '@/common/token/verify';
 import { app } from '@/server';
 
 vi.mock('@/api/auth/authRepository');
+vi.mock('@/common/token/verify');
 
 describe('Auth API Endpoints', () => {
   const mockAuth: Auth = {
@@ -20,6 +22,13 @@ describe('Auth API Endpoints', () => {
     email: 'user1@user.com',
     password: 'P3R#35J8t8g4',
     passwordConfirmation: 'P3R#35J8t8g4',
+  };
+
+  const mockUpdate: Update = {
+    name: 'User 14',
+    password: 'P3R#35J8t8g4',
+    newPassword: 'N3wP@ssw0rd',
+    newPasswordConfirmation: 'N3wP@ssw0rd',
   };
 
   afterAll(() => {
@@ -161,6 +170,130 @@ describe('Auth API Endpoints', () => {
       expect(responseBody.success).toBeFalsy();
       expect(responseBody.message).toContain('Password must contain at least one uppercase letter');
       expect(responseBody.message).toContain('Password must contain at least one special character');
+    });
+  });
+
+  describe('POST /auth/update', () => {
+    it('should be able to update', async () => {
+      // Arrange
+      (authRepository.loginAsync as Mock).mockReturnValue(true);
+      (authRepository.updateAsync as Mock).mockReturnValue(true);
+      (verifyToken as Mock).mockImplementation((_, __, onSuccess) => {
+        onSuccess({ email: mockRegister.email });
+      });
+
+      // Act
+      const response = await request(app)
+        .post('/auth/update')
+        .send(mockUpdate)
+        .set('Content-Type', 'application/json')
+        .set('Authorization', 'Bearer {token}');
+      const responseBody: ServiceResponse<Register> = response.body;
+
+      // Assert
+      expect(response.statusCode).toEqual(StatusCodes.OK);
+      expect(responseBody.success).toBeTruthy();
+      expect(responseBody.message).toContain('Update successful');
+    });
+
+    it('should return error when login fails', async () => {
+      // Arrange
+      (authRepository.loginAsync as Mock).mockReturnValue(false);
+      (verifyToken as Mock).mockImplementation((_, __, onSuccess) => {
+        onSuccess({ email: mockRegister.email });
+      });
+
+      // Act
+      const response = await request(app)
+        .post('/auth/update')
+        .send(mockUpdate)
+        .set('Content-Type', 'application/json')
+        .set('Authorization', 'Bearer {token}');
+      const responseBody: ServiceResponse<Register> = response.body;
+
+      // Assert
+      expect(response.statusCode).toEqual(StatusCodes.UNAUTHORIZED);
+      expect(responseBody.success).toBeFalsy();
+      expect(responseBody.message).toContain('Password is invalid');
+    });
+
+    it('should return error when passwords do not match', async () => {
+      // Arrange
+      (authRepository.loginAsync as Mock).mockReturnValue(true);
+      (verifyToken as Mock).mockImplementation((_, __, onSuccess) => {
+        onSuccess({ email: mockRegister.email });
+      });
+      const update: Update = {
+        ...mockUpdate,
+        newPasswordConfirmation: 'Wrong1@78',
+      };
+
+      // Act
+      const response = await request(app)
+        .post('/auth/update')
+        .send(update)
+        .set('Content-Type', 'application/json')
+        .set('Authorization', 'Bearer {token}');
+      const responseBody: ServiceResponse<Register> = response.body;
+
+      // Assert
+      expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+      expect(responseBody.success).toBeFalsy();
+      expect(responseBody.message).toContain('Passwords do not match');
+    });
+
+    it('should return error when an exception is thrown', async () => {
+      // Arrange
+      (authRepository.loginAsync as Mock).mockImplementation(() => {
+        throw new Error('Something went wrong');
+      });
+      (verifyToken as Mock).mockImplementation((_, __, onSuccess) => {
+        onSuccess({ email: mockRegister.email });
+      });
+
+      // Act
+      const response = await request(app)
+        .post('/auth/update')
+        .send(mockUpdate)
+        .set('Content-Type', 'application/json')
+        .set('Authorization', 'Bearer {token}');
+      const responseBody: ServiceResponse<Register> = response.body;
+
+      // Assert
+      expect(response.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
+      expect(responseBody.success).toBeFalsy();
+      expect(responseBody.message).toContain('Something went wrong');
+    });
+
+    it('should return error when token is invalid', async () => {
+      // Arrange
+      (verifyToken as Mock).mockImplementation((_, onError) => {
+        onError();
+      });
+
+      // Act
+      const response = await request(app)
+        .post('/auth/update')
+        .send(mockUpdate)
+        .set('Content-Type', 'application/json')
+        .set('Authorization', 'Bearer {token}');
+      const responseBody: ServiceResponse<Register> = response.body;
+
+      // Assert
+      expect(response.statusCode).toEqual(StatusCodes.FORBIDDEN);
+      expect(responseBody.success).toBeFalsy();
+      expect(responseBody.message).toContain('Authentication token is invalid');
+    });
+
+    it('should return error when token is invalid', async () => {
+      // Act
+      const response = await request(app).post('/auth/update').send(mockUpdate).set('Content-Type', 'application/json');
+      const responseBody: ServiceResponse<Register> = response.body;
+
+      // Assert
+      expect(response.statusCode).toEqual(StatusCodes.UNAUTHORIZED);
+      expect(responseBody.success).toBeFalsy();
+      expect(responseBody.message).toContain('Authentication token not provided');
     });
   });
 });

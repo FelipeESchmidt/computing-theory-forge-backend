@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import { Mock } from 'vitest';
 
-import { Auth, Register } from '@/api/auth/authModel';
+import { Auth, Register, Update } from '@/api/auth/authModel';
 import { authRepository } from '@/api/auth/authRepository';
 import { authService } from '@/api/auth/authService';
 import { extractToken } from '@/common/token/extract';
@@ -25,6 +25,13 @@ describe('authService', () => {
     email: 'user1@user.com',
     password: 'P3R#35J8t8g4',
     passwordConfirmation: 'P3R#35J8t8g4',
+  };
+
+  const mockUpdate: Update = {
+    name: 'User 14',
+    password: 'P3R#35J8t8g4',
+    newPassword: 'N3wP@ssw0rd',
+    newPasswordConfirmation: 'N3wP@ssw0rd',
   };
 
   afterAll(() => {
@@ -147,6 +154,85 @@ describe('authService', () => {
       expect(result.statusCode).toEqual(StatusCodes.BAD_REQUEST);
       expect(result.success).toBeFalsy();
       expect(result.message).toContain('Passwords do not match');
+    });
+  });
+
+  describe('update', () => {
+    it('should return success when update is successful', async () => {
+      // Arrange
+      (authRepository.loginAsync as Mock).mockReturnValue(true);
+      (authRepository.updateAsync as Mock).mockReturnValue(true);
+
+      // Act
+      const result = await authService.update(mockUpdate, mockRegister.email);
+
+      // Assert
+      expect(result.statusCode).toEqual(StatusCodes.OK);
+      expect(result.success).toBeTruthy();
+      expect(result.message).toContain('Update successful');
+    });
+
+    it('should return error when update fails', async () => {
+      // Arrange
+      (authRepository.loginAsync as Mock).mockReturnValue(true);
+      (authRepository.updateAsync as Mock).mockReturnValue(false);
+
+      // Act
+      const result = await authService.update(mockUpdate, mockRegister.email);
+
+      // Assert
+      expect(result.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
+      expect(result.success).toBeFalsy();
+      expect(result.message).toContain('Update failed');
+    });
+
+    it('should return error when an exception is thrown', async () => {
+      // Arrange
+      (authRepository.loginAsync as Mock).mockReturnValue(true);
+      (authRepository.updateAsync as Mock).mockImplementation(() => {
+        throw new Error('Test error');
+      });
+
+      // Act
+      const result = await authService.update(mockUpdate, mockRegister.email);
+
+      // Assert
+      expect(result.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
+      expect(result.success).toBeFalsy();
+      expect(result.message).toContain('Error updating');
+    });
+
+    it('should return error when passwords do not match', async () => {
+      // Arrange
+      (authRepository.loginAsync as Mock).mockReturnValue(true);
+      (authRepository.updateAsync as Mock).mockReturnValue(true);
+
+      // Act
+      const result = await authService.update(
+        {
+          ...mockUpdate,
+          newPasswordConfirmation: 'wrongPassword',
+        },
+        mockRegister.email
+      );
+
+      // Assert
+      expect(result.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+      expect(result.success).toBeFalsy();
+      expect(result.message).toContain('Passwords do not match');
+    });
+
+    it('should return error when old password is incorrect', async () => {
+      // Arrange
+      (authRepository.loginAsync as Mock).mockReturnValue(false);
+
+      // Act
+      const result = await authService.update(mockUpdate, mockRegister.email);
+
+      // Assert
+      expect(result.statusCode).toEqual(StatusCodes.UNAUTHORIZED);
+      expect(result.success).toBeFalsy();
+      expect(result.message).toContain('Password is invalid');
     });
   });
 });

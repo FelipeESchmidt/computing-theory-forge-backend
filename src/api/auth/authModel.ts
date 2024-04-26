@@ -35,3 +35,21 @@ export const PostRegisterSchema = z.object({
     passwordConfirmation: commonValidations.password,
   }),
 });
+
+export type Update = z.infer<typeof UpdateSchema>;
+export const UpdateSchema = z.object({
+  name: RegisterSchema.shape.name,
+  password: AuthSchema.shape.password,
+  newPassword: z.string(),
+  newPasswordConfirmation: z.string(),
+});
+
+// Input Validation for 'POST /auth/Update' endpoint
+export const PostUpdateSchema = z.object({
+  body: z.object({
+    name: UpdateSchema.shape.name,
+    password: AuthSchema.shape.password,
+    newPassword: commonValidations.password,
+    newPasswordConfirmation: commonValidations.password,
+  }),
+});
