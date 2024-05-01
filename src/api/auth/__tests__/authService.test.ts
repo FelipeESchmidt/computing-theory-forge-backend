@@ -5,6 +5,7 @@ import { Auth, Register, Update } from '@/api/auth/authModel';
 import { authRepository } from '@/api/auth/authRepository';
 import { authService } from '@/api/auth/authService';
 import { extractToken } from '@/common/token/extract';
+import { messages } from '@/common/utils/messages';
 
 vi.mock('@/api/auth/authRepository');
 vi.mock('@/server', () => ({
@@ -51,7 +52,7 @@ describe('authService', () => {
       // Assert
       expect(result.statusCode).toEqual(StatusCodes.OK);
       expect(result.success).toBeTruthy();
-      expect(result.message).toContain('Login successful');
+      expect(result.message).toContain(messages.loginSuccessful);
 
       expect(extractToken(token).email).toEqual(mockAuth.email);
     });
@@ -66,7 +67,7 @@ describe('authService', () => {
       // Assert
       expect(result.statusCode).toEqual(StatusCodes.UNAUTHORIZED);
       expect(result.success).toBeFalsy();
-      expect(result.message).toContain('Invalid credentials');
+      expect(result.message).toContain(messages.invalidCredentials);
     });
 
     it('should return error when an exception is thrown', async () => {
@@ -96,7 +97,7 @@ describe('authService', () => {
       // Assert
       expect(result.statusCode).toEqual(StatusCodes.CREATED);
       expect(result.success).toBeTruthy();
-      expect(result.message).toContain('Registration successful');
+      expect(result.message).toContain(messages.registrationSuccessful);
     });
 
     it('should return error when registration fails', async () => {
@@ -109,7 +110,7 @@ describe('authService', () => {
       // Assert
       expect(result.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
       expect(result.success).toBeFalsy();
-      expect(result.message).toContain('Registration failed');
+      expect(result.message).toContain(messages.registrationFailed);
     });
 
     it('should return error when an exception is thrown', async () => {
@@ -137,7 +138,7 @@ describe('authService', () => {
       // Assert
       expect(result.statusCode).toEqual(StatusCodes.CONFLICT);
       expect(result.success).toBeFalsy();
-      expect(result.message).toContain('Email already exists');
+      expect(result.message).toContain(messages.emailAlreadyExists);
     });
 
     it('should return error when passwords do not match', async () => {
@@ -153,7 +154,7 @@ describe('authService', () => {
       // Assert
       expect(result.statusCode).toEqual(StatusCodes.BAD_REQUEST);
       expect(result.success).toBeFalsy();
-      expect(result.message).toContain('Passwords do not match');
+      expect(result.message).toContain(messages.passwordsDoNotMatch);
     });
   });
 
@@ -169,7 +170,7 @@ describe('authService', () => {
       // Assert
       expect(result.statusCode).toEqual(StatusCodes.OK);
       expect(result.success).toBeTruthy();
-      expect(result.message).toContain('Update successful');
+      expect(result.message).toContain(messages.updateSuccessful);
     });
 
     it('should return error when update fails', async () => {
@@ -183,7 +184,7 @@ describe('authService', () => {
       // Assert
       expect(result.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
       expect(result.success).toBeFalsy();
-      expect(result.message).toContain('Update failed');
+      expect(result.message).toContain(messages.updateFailed);
     });
 
     it('should return error when an exception is thrown', async () => {
@@ -219,7 +220,7 @@ describe('authService', () => {
       // Assert
       expect(result.statusCode).toEqual(StatusCodes.BAD_REQUEST);
       expect(result.success).toBeFalsy();
-      expect(result.message).toContain('Passwords do not match');
+      expect(result.message).toContain(messages.passwordsDoNotMatch);
     });
 
     it('should return error when old password is incorrect', async () => {
@@ -232,7 +233,7 @@ describe('authService', () => {
       // Assert
       expect(result.statusCode).toEqual(StatusCodes.UNAUTHORIZED);
       expect(result.success).toBeFalsy();
-      expect(result.message).toContain('Password is invalid');
+      expect(result.message).toContain(messages.passwordIsInvalid);
     });
   });
 });

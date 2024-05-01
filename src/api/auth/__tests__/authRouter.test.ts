@@ -6,6 +6,7 @@ import { Auth, Register, Update } from '@/api/auth/authModel';
 import { authRepository } from '@/api/auth/authRepository';
 import { ServiceResponse } from '@/common/models/serviceResponse';
 import { verifyToken } from '@/common/token/verify';
+import { messages } from '@/common/utils/messages';
 import { app } from '@/server';
 
 vi.mock('@/api/auth/authRepository');
@@ -47,7 +48,7 @@ describe('Auth API Endpoints', () => {
       // Assert
       expect(response.statusCode).toEqual(StatusCodes.OK);
       expect(responseBody.success).toBeTruthy();
-      expect(responseBody.message).toContain('Login successful');
+      expect(responseBody.message).toContain(messages.loginSuccessful);
     });
 
     it('should return error when login fails', async () => {
@@ -61,7 +62,7 @@ describe('Auth API Endpoints', () => {
       // Assert
       expect(response.statusCode).toEqual(StatusCodes.UNAUTHORIZED);
       expect(responseBody.success).toBeFalsy();
-      expect(responseBody.message).toContain('Invalid credentials');
+      expect(responseBody.message).toContain(messages.invalidCredentials);
     });
 
     it('should return error when an exception is thrown', async () => {
@@ -114,7 +115,7 @@ describe('Auth API Endpoints', () => {
       // Assert
       expect(response.statusCode).toEqual(StatusCodes.CREATED);
       expect(responseBody.success).toBeTruthy();
-      expect(responseBody.message).toContain('Registration successful');
+      expect(responseBody.message).toContain(messages.registrationSuccessful);
     });
 
     it('should return error when email already exists', async () => {
@@ -131,7 +132,7 @@ describe('Auth API Endpoints', () => {
       // Assert
       expect(response.statusCode).toEqual(StatusCodes.CONFLICT);
       expect(responseBody.success).toBeFalsy();
-      expect(responseBody.message).toContain('Email already exists');
+      expect(responseBody.message).toContain(messages.emailAlreadyExists);
     });
 
     it('should return error when passwords do not match', async () => {
@@ -149,7 +150,7 @@ describe('Auth API Endpoints', () => {
       // Assert
       expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
       expect(responseBody.success).toBeFalsy();
-      expect(responseBody.message).toContain('Passwords do not match');
+      expect(responseBody.message).toContain(messages.passwordsDoNotMatch);
     });
 
     it('should return error when password is weak', async () => {
@@ -193,7 +194,7 @@ describe('Auth API Endpoints', () => {
       // Assert
       expect(response.statusCode).toEqual(StatusCodes.OK);
       expect(responseBody.success).toBeTruthy();
-      expect(responseBody.message).toContain('Update successful');
+      expect(responseBody.message).toContain(messages.updateSuccessful);
     });
 
     it('should return error when login fails', async () => {
@@ -214,7 +215,7 @@ describe('Auth API Endpoints', () => {
       // Assert
       expect(response.statusCode).toEqual(StatusCodes.UNAUTHORIZED);
       expect(responseBody.success).toBeFalsy();
-      expect(responseBody.message).toContain('Password is invalid');
+      expect(responseBody.message).toContain(messages.passwordIsInvalid);
     });
 
     it('should return error when passwords do not match', async () => {
@@ -239,7 +240,7 @@ describe('Auth API Endpoints', () => {
       // Assert
       expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
       expect(responseBody.success).toBeFalsy();
-      expect(responseBody.message).toContain('Passwords do not match');
+      expect(responseBody.message).toContain(messages.passwordsDoNotMatch);
     });
 
     it('should return error when an exception is thrown', async () => {
@@ -282,7 +283,7 @@ describe('Auth API Endpoints', () => {
       // Assert
       expect(response.statusCode).toEqual(StatusCodes.FORBIDDEN);
       expect(responseBody.success).toBeFalsy();
-      expect(responseBody.message).toContain('Authentication token is invalid');
+      expect(responseBody.message).toContain(messages.authenticationTokenIsInvalid);
     });
 
     it('should return error when token is invalid', async () => {
@@ -293,7 +294,7 @@ describe('Auth API Endpoints', () => {
       // Assert
       expect(response.statusCode).toEqual(StatusCodes.UNAUTHORIZED);
       expect(responseBody.success).toBeFalsy();
-      expect(responseBody.message).toContain('Authentication token not provided');
+      expect(responseBody.message).toContain(messages.authenticationTokenNotProvided);
     });
   });
 });

@@ -3,12 +3,13 @@ import { StatusCodes } from 'http-status-codes';
 
 import { ResponseStatus, ServiceResponse } from '@/common/models/serviceResponse';
 import { verifyToken } from '@/common/token/verify';
+import { messages } from '@/common/utils/messages';
 
 export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(' ')[1];
 
   if (token == null) {
-    const errorMessage = `Authentication token not provided`;
+    const errorMessage = messages.authenticationTokenNotProvided;
     const statusCode = StatusCodes.UNAUTHORIZED;
     return res
       .status(statusCode)
@@ -18,7 +19,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
   verifyToken(
     token,
     () => {
-      const errorMessage = `Authentication token is invalid`;
+      const errorMessage = messages.authenticationTokenIsInvalid;
       const statusCode = StatusCodes.FORBIDDEN;
       return res
         .status(statusCode)
