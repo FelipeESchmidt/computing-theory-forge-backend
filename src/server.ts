@@ -12,6 +12,7 @@ import requestLogger from '@/common/middleware/requestLogger';
 import { env } from '@/common/utils/envConfig';
 
 import { authRouter } from './api/auth/authRouter';
+import { theoreticalMachineRouter } from './api/theoreticalMachine/theoreticalMachineRouter';
 
 const logger = pino({ name: 'server start' });
 const app: Express = express();
@@ -31,6 +32,7 @@ app.use(requestLogger);
 // Routes
 app.use('/health-check', healthCheckRouter);
 app.use('/auth', authRouter);
+app.use('/theoretical-machineService', theoreticalMachineRouter);
 
 // Swagger UI
 app.use(openAPIRouter);

@@ -17,4 +17,11 @@ export const messages = {
   // TOKEN
   authenticationTokenNotProvided: 'TOKEN_NOT_PROVIDED',
   authenticationTokenIsInvalid: 'TOKEN_IS_INVALID',
+
+  // USER
+  userNotFound: 'USER_NOT_FOUND',
+
+  // THEORETICAL MACHINE
+  machineSaveFailed: 'MACHINE_SAVE_FAILED',
+  machineSaveSuccessful: 'MACHINE_SAVE_SUCCESSFUL',
 };
