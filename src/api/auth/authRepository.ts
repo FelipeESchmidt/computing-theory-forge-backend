@@ -1,4 +1,10 @@
-import { checkUserByEmail, checkUserByEmailAndPassword, createUser, updateUser } from '@/database/controllers';
+import {
+  checkUserByEmail,
+  checkUserByEmailAndPassword,
+  createUser,
+  getUserIdByEmail,
+  updateUser,
+} from '@/database/controllers';
 
 import { Auth, Register, Update } from './authModel';
 
@@ -14,5 +20,8 @@ export const authRepository = {
   },
   updateAsync: async (update: Update, email: string): Promise<boolean> => {
     return await updateUser(update.name, email, update.password);
+  },
+  getUserIdByEmailAsync: async (email: string): Promise<number> => {
+    return await getUserIdByEmail(email);
   },
 };
