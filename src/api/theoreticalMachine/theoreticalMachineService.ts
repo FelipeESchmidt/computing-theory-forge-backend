@@ -25,4 +25,36 @@ export const theoreticalMachineService = {
       return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   },
+  getAllMachines: async (email: string): Promise<ServiceResponse<TheoreticalMachine[] | null>> => {
+    try {
+      const userId = await authRepository.getUserIdByEmailAsync(email);
+      if (!userId) {
+        return new ServiceResponse(ResponseStatus.Failed, messages.userNotFound, null, StatusCodes.NOT_FOUND);
+      }
+      const machines = await theoreticalMachineRepository.getAllMachinesAsync(userId);
+      return new ServiceResponse(ResponseStatus.Success, messages.machineGetAllSuccessful, machines, StatusCodes.OK);
+    } catch (ex) {
+      const errorMessage = `Error getting all machines: ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  },
+  deleteMachine: async (email: string, machineId: string): Promise<ServiceResponse<null>> => {
+    try {
+      const userId = await authRepository.getUserIdByEmailAsync(email);
+      if (!userId) {
+        return new ServiceResponse(ResponseStatus.Failed, messages.userNotFound, null, StatusCodes.NOT_FOUND);
+      }
+      const machineIdAsNumber = parseInt(machineId, 10);
+      const isSuccessful = await theoreticalMachineRepository.deleteMachineAsync(userId, machineIdAsNumber);
+      if (!isSuccessful) {
+        throw new Error(messages.machineDeleteFailed);
+      }
+      return new ServiceResponse(ResponseStatus.Success, messages.machineDeleteSuccessful, null, StatusCodes.OK);
+    } catch (ex) {
+      const errorMessage = `Error getting all machines: ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  },
 };

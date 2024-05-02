@@ -31,5 +31,32 @@ export const theoreticalMachineRouter: Router = (() => {
     }
   );
 
+  theoreticalMachineRegistry.registerPath({
+    method: 'get',
+    path: '/theoretical-machineService/get-all-machines',
+    tags: ['TheoreticalMachineService'],
+    responses: createApiResponse(z.string(), 'Success'),
+  });
+
+  router.get('/get-all-machines', authenticateToken, async (req: Request, res: Response) => {
+    const serviceResponse = await theoreticalMachineService.getAllMachines(req.params.email as string);
+    handleServiceResponse(serviceResponse, res);
+  });
+
+  theoreticalMachineRegistry.registerPath({
+    method: 'delete',
+    path: '/theoretical-machineService/delete-machine/id',
+    tags: ['TheoreticalMachineService'],
+    responses: createApiResponse(z.string(), 'Success'),
+  });
+
+  router.delete('/delete-machine/:id', authenticateToken, async (req: Request, res: Response) => {
+    const serviceResponse = await theoreticalMachineService.deleteMachine(
+      req.params.email as string,
+      req.params.id as string
+    );
+    handleServiceResponse(serviceResponse, res);
+  });
+
   return router;
 })();

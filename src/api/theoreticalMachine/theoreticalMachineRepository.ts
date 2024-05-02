@@ -1,8 +1,15 @@
 import { TheoreticalMachine } from '@/api/theoreticalMachine/theoreticalMachineModel';
-import { createUserMachine } from '@/database/controllers/theoreticalMachine';
+import { createUserMachine, deleteUserMachine, getUserMachines } from '@/database/controllers/theoreticalMachine';
+import { ITheoreticalMachine } from '@/database/models/theoreticalMachine';
 
 export const theoreticalMachineRepository = {
   saveMachineAsync: async (userId: number, theoreticalMachine: TheoreticalMachine): Promise<boolean> => {
     return await createUserMachine(userId, theoreticalMachine);
+  },
+  getAllMachinesAsync: async (userId: number): Promise<ITheoreticalMachine[]> => {
+    return await getUserMachines(userId);
+  },
+  deleteMachineAsync: async (userId: number, machineId: number): Promise<boolean> => {
+    return await deleteUserMachine(userId, machineId);
   },
 };

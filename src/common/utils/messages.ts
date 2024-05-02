@@ -24,4 +24,7 @@ export const messages = {
   // THEORETICAL MACHINE
   machineSaveFailed: 'MACHINE_SAVE_FAILED',
   machineSaveSuccessful: 'MACHINE_SAVE_SUCCESSFUL',
+  machineGetAllSuccessful: 'MACHINE_GET_ALL_SUCCESSFUL',
+  machineDeleteFailed: 'MACHINE_DELETE_FAILED',
+  machineDeleteSuccessful: 'MACHINE_DELETE_SUCCESSFUL',
 };
