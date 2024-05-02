@@ -51,10 +51,7 @@ export const theoreticalMachineRouter: Router = (() => {
   });
 
   router.delete('/delete-machine/:id', authenticateToken, async (req: Request, res: Response) => {
-    const serviceResponse = await theoreticalMachineService.deleteMachine(
-      req.params.email as string,
-      req.params.id as string
-    );
+    const serviceResponse = await theoreticalMachineService.deleteMachine(req.params.email as string, req.params.id);
     handleServiceResponse(serviceResponse, res);
   });
 
