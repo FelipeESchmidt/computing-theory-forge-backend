@@ -45,7 +45,7 @@ export const theoreticalMachineRouter: Router = (() => {
 
   theoreticalMachineRegistry.registerPath({
     method: 'delete',
-    path: '/theoretical-machineService/delete-machine/id',
+    path: '/theoretical-machineService/delete-machine/:id',
     tags: ['TheoreticalMachineService'],
     responses: createApiResponse(z.string(), 'Success'),
   });
