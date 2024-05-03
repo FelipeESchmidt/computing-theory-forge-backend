@@ -1,6 +1,6 @@
 import { TheoreticalMachine } from '@/api/theoreticalMachine/theoreticalMachineModel';
 import { ITheoreticalMachine } from '@/database/models/theoreticalMachine';
-import { executeDeleteQuery, executeInsertQuery, executeQuery } from '@/database/queries';
+import { executeDeleteQuery, executeInsertQuery, executeQuery, executeUpdateQuery } from '@/database/queries';
 import { ETableNames } from '@/database/tables';
 
 export const createUserMachine = async (userId: number, theoreticalMachine: TheoreticalMachine): Promise<boolean> => {
@@ -32,6 +32,21 @@ export const deleteUserMachine = async (userId: number, machineId: number): Prom
     return true;
   } catch (error) {
     console.error(`Error deleting machine: `, error);
+    throw error;
+  }
+};
+
+export const updateUserMachine = async (
+  userId: number,
+  machineId: number,
+  theoreticalMachine: TheoreticalMachine
+): Promise<boolean> => {
+  try {
+    const query = `UPDATE ${ETableNames.THEORETICAL_MACHINE} SET name = ?, machine = ? WHERE userId = ? AND id = ?`;
+    await executeUpdateQuery(query, [theoreticalMachine.name, theoreticalMachine.machine, userId, machineId]);
+    return true;
+  } catch (error) {
+    console.error(`Error updating machine: `, error);
     throw error;
   }
 };

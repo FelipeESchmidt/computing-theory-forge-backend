@@ -27,4 +27,6 @@ export const messages = {
   machineGetAllSuccessful: 'MACHINE_GET_ALL_SUCCESSFUL',
   machineDeleteFailed: 'MACHINE_DELETE_FAILED',
   machineDeleteSuccessful: 'MACHINE_DELETE_SUCCESSFUL',
+  machineUpdateFailed: 'MACHINE_UPDATE_FAILED',
+  machineUpdateSuccessful: 'MACHINE_UPDATE_SUCCESSFUL',
 };

@@ -55,5 +55,27 @@ export const theoreticalMachineRouter: Router = (() => {
     handleServiceResponse(serviceResponse, res);
   });
 
+  theoreticalMachineRegistry.registerPath({
+    method: 'put',
+    path: '/theoretical-machineService/update-machine/:id',
+    tags: ['TheoreticalMachineService'],
+    request: { body: { content: { 'application/json': { schema: TheoreticalMachineSaveSchema } } } },
+    responses: createApiResponse(z.string(), 'Success'),
+  });
+
+  router.put(
+    '/update-machine/:id',
+    authenticateToken,
+    validateRequest(TheoreticalMachineSaveSchema),
+    async (req: Request, res: Response) => {
+      const serviceResponse = await theoreticalMachineService.updateMachine(
+        req.body,
+        req.params.email as string,
+        req.params.id
+      );
+      handleServiceResponse(serviceResponse, res);
+    }
+  );
+
   return router;
 })();

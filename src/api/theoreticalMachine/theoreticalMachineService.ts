@@ -57,4 +57,30 @@ export const theoreticalMachineService = {
       return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   },
+  updateMachine: async (
+    theoreticalMachine: TheoreticalMachine,
+    email: string,
+    machineId: string
+  ): Promise<ServiceResponse<null>> => {
+    try {
+      const userId = await authRepository.getUserIdByEmailAsync(email);
+      if (!userId) {
+        return new ServiceResponse(ResponseStatus.Failed, messages.userNotFound, null, StatusCodes.NOT_FOUND);
+      }
+      const machineIdAsNumber = parseInt(machineId, 10);
+      const isSuccessful = await theoreticalMachineRepository.updateUserMachineAsync(
+        userId,
+        machineIdAsNumber,
+        theoreticalMachine
+      );
+      if (!isSuccessful) {
+        throw new Error(messages.machineUpdateFailed);
+      }
+      return new ServiceResponse(ResponseStatus.Success, messages.machineUpdateSuccessful, null, StatusCodes.OK);
+    } catch (ex) {
+      const errorMessage = `Error updating machine: ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  },
 };
