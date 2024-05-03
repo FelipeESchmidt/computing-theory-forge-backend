@@ -44,3 +44,14 @@ export const updateUser = async (name: string, email: string, password: string):
     throw error;
   }
 };
+
+export const getUserIdByEmail = async (email: string): Promise<number> => {
+  try {
+    const query = `SELECT id FROM ${ETableNames.USERS} WHERE email = ?`;
+    const [result] = await executeQuery<{ id: number }>(query, [email]);
+    return result.id;
+  } catch (error) {
+    console.error(`Error validating user email: `, error);
+    throw error;
+  }
+};
