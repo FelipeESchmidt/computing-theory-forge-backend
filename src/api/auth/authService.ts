@@ -19,7 +19,8 @@ export const authService = {
       if (!isValid) {
         return new ServiceResponse(ResponseStatus.Failed, messages.invalidCredentials, null, StatusCodes.UNAUTHORIZED);
       }
-      const token = generateToken({ email: auth.email });
+      const userName = await authRepository.getUserNameByEmailAsync(auth.email);
+      const token = generateToken({ name: userName, email: auth.email });
       return new ServiceResponse<AuthResponse>(
         ResponseStatus.Success,
         messages.loginSuccessful,
