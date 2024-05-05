@@ -3,6 +3,7 @@ import {
   checkUserByEmailAndPassword,
   createUser,
   getUserIdByEmail,
+  getUserNameByEmail,
   updateUser,
 } from '@/database/controllers';
 
@@ -23,5 +24,8 @@ export const authRepository = {
   },
   getUserIdByEmailAsync: async (email: string): Promise<number> => {
     return await getUserIdByEmail(email);
+  },
+  getUserNameByEmailAsync: async (email: string): Promise<string> => {
+    return await getUserNameByEmail(email);
   },
 };

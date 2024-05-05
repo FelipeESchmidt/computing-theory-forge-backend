@@ -43,6 +43,7 @@ describe('authService', () => {
     it('should return token when login is successful', async () => {
       // Arrange
       (authRepository.loginAsync as Mock).mockReturnValue(true);
+      (authRepository.getUserNameByEmailAsync as Mock).mockReturnValue(mockRegister.name);
 
       // Act
       const result = await authService.login(mockAuth);
@@ -55,6 +56,7 @@ describe('authService', () => {
       expect(result.message).toContain(messages.loginSuccessful);
 
       expect(extractToken(token).email).toEqual(mockAuth.email);
+      expect(extractToken(token).name).toEqual(mockRegister.name);
     });
 
     it('should return error when login fails', async () => {
