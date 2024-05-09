@@ -8,7 +8,7 @@ import {
 import { ITheoreticalMachine } from '@/database/models/theoreticalMachine';
 
 export const theoreticalMachineRepository = {
-  saveMachineAsync: async (userId: number, theoreticalMachine: TheoreticalMachine): Promise<boolean> => {
+  saveMachineAsync: async (userId: number, theoreticalMachine: TheoreticalMachine): Promise<number> => {
     return await createUserMachine(userId, theoreticalMachine);
   },
   getAllMachinesAsync: async (userId: number): Promise<ITheoreticalMachine[]> => {

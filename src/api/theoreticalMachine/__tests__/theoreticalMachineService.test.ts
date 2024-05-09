@@ -34,7 +34,7 @@ describe('theoreticalMachineService', () => {
 
   beforeEach(() => {
     (authRepository.getUserIdByEmailAsync as Mock).mockReturnValue(1);
-    (theoreticalMachineRepository.saveMachineAsync as Mock).mockReturnValue(true);
+    (theoreticalMachineRepository.saveMachineAsync as Mock).mockReturnValue(1);
     (theoreticalMachineRepository.deleteMachineAsync as Mock).mockReturnValue(true);
     (theoreticalMachineRepository.updateUserMachineAsync as Mock).mockReturnValue(true);
   });
@@ -48,6 +48,7 @@ describe('theoreticalMachineService', () => {
       expect(result.statusCode).toEqual(StatusCodes.OK);
       expect(result.success).toBeTruthy();
       expect(result.message).toContain(messages.machineSaveSuccessful);
+      expect(result.responseObject).toEqual({ id: 1 });
     });
 
     it('should return error when saveMachine fails', async () => {

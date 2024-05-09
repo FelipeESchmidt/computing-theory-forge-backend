@@ -3,11 +3,12 @@ import { ITheoreticalMachine } from '@/database/models/theoreticalMachine';
 import { executeDeleteQuery, executeInsertQuery, executeQuery, executeUpdateQuery } from '@/database/queries';
 import { ETableNames } from '@/database/tables';
 
-export const createUserMachine = async (userId: number, theoreticalMachine: TheoreticalMachine): Promise<boolean> => {
+export const createUserMachine = async (userId: number, theoreticalMachine: TheoreticalMachine): Promise<number> => {
   try {
     const query = `INSERT INTO ${ETableNames.THEORETICAL_MACHINE} (userId, name, machine) VALUES (?, ?, ?)`;
-    await executeInsertQuery(query, [userId, theoreticalMachine.name, theoreticalMachine.machine]);
-    return true;
+    const { insertId } = await executeInsertQuery(query, [userId, theoreticalMachine.name, theoreticalMachine.machine]);
+
+    return insertId;
   } catch (error) {
     console.error(`Error saving machine: `, error);
     throw error;
