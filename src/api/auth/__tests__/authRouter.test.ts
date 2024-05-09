@@ -185,7 +185,7 @@ describe('Auth API Endpoints', () => {
 
       // Act
       const response = await request(app)
-        .post('/auth/update')
+        .put('/auth/update')
         .send(mockUpdate)
         .set('Content-Type', 'application/json')
         .set('Authorization', 'Bearer {token}');
@@ -206,7 +206,7 @@ describe('Auth API Endpoints', () => {
 
       // Act
       const response = await request(app)
-        .post('/auth/update')
+        .put('/auth/update')
         .send(mockUpdate)
         .set('Content-Type', 'application/json')
         .set('Authorization', 'Bearer {token}');
@@ -231,7 +231,7 @@ describe('Auth API Endpoints', () => {
 
       // Act
       const response = await request(app)
-        .post('/auth/update')
+        .put('/auth/update')
         .send(update)
         .set('Content-Type', 'application/json')
         .set('Authorization', 'Bearer {token}');
@@ -254,7 +254,7 @@ describe('Auth API Endpoints', () => {
 
       // Act
       const response = await request(app)
-        .post('/auth/update')
+        .put('/auth/update')
         .send(mockUpdate)
         .set('Content-Type', 'application/json')
         .set('Authorization', 'Bearer {token}');
@@ -274,7 +274,7 @@ describe('Auth API Endpoints', () => {
 
       // Act
       const response = await request(app)
-        .post('/auth/update')
+        .put('/auth/update')
         .send(mockUpdate)
         .set('Content-Type', 'application/json')
         .set('Authorization', 'Bearer {token}');
@@ -288,7 +288,7 @@ describe('Auth API Endpoints', () => {
 
     it('should return error when token is invalid', async () => {
       // Act
-      const response = await request(app).post('/auth/update').send(mockUpdate).set('Content-Type', 'application/json');
+      const response = await request(app).put('/auth/update').send(mockUpdate).set('Content-Type', 'application/json');
       const responseBody: ServiceResponse<Register> = response.body;
 
       // Assert

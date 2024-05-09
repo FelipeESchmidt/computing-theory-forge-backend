@@ -34,16 +34,13 @@ describe('Auth API Endpoints', () => {
       onSuccess({ email: mockAuth.email });
     });
     (authRepository.getUserIdByEmailAsync as Mock).mockReturnValue(1);
-    (theoreticalMachineRepository.saveMachineAsync as Mock).mockReturnValue(true);
+    (theoreticalMachineRepository.saveMachineAsync as Mock).mockReturnValue(1);
     (theoreticalMachineRepository.deleteMachineAsync as Mock).mockReturnValue(true);
     (theoreticalMachineRepository.updateUserMachineAsync as Mock).mockReturnValue(true);
   });
 
   describe('POST theoretical-machineService/save-machine', () => {
     it('should return success when saveMachine is successful', async () => {
-      // Arrange
-      (theoreticalMachineRepository.saveMachineAsync as Mock).mockReturnValue(true);
-
       // Act
       const response = await request(app)
         .post('/theoretical-machineService/save-machine')
@@ -55,6 +52,7 @@ describe('Auth API Endpoints', () => {
       expect(response.status).toEqual(StatusCodes.OK);
       expect(response.body.success).toBeTruthy();
       expect(response.body.message).toContain(messages.machineSaveSuccessful);
+      expect(response.body.responseObject).toEqual({ id: 1 });
     });
 
     it('should return error when saveMachine fails', async () => {
