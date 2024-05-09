@@ -47,7 +47,7 @@ export const authRouter: Router = (() => {
     responses: createApiResponse(z.string(), 'Success'),
   });
 
-  router.post('/update', authenticateToken, validateRequest(PostUpdateSchema), async (req: Request, res: Response) => {
+  router.put('/update', authenticateToken, validateRequest(PostUpdateSchema), async (req: Request, res: Response) => {
     const serviceResponse = await authService.update(req.body, req.params.email as string);
     handleServiceResponse(serviceResponse, res);
   });
