@@ -18,7 +18,8 @@
     "test": "vitest run",
     "test:dev": "vitest dev",
     "test:cov": "vitest run --coverage",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "rimraf": "./node_modules/rimraf/bin.js"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.0.0",
