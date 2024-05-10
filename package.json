@@ -4,6 +4,9 @@
   "description": "Backend for the Computing Theory Forge project",
   "main": "index.ts",
   "private": true,
+  "engines": {
+    "node": "18"
+  },
   "scripts": {
     "dev": "tsx watch --clear-screen=false src/index.ts | pino-pretty",
     "build": "rimraf dist && tsup",
