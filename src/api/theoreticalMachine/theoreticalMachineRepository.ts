@@ -1,4 +1,4 @@
-import { TheoreticalMachine } from '@/api/theoreticalMachine/theoreticalMachineModel';
+import { MinifiedTheoreticalMachine } from '@/api/theoreticalMachine/theoreticalMachineModel';
 import {
   createUserMachine,
   deleteUserMachine,
@@ -8,7 +8,7 @@ import {
 import { ITheoreticalMachine } from '@/database/models/theoreticalMachine';
 
 export const theoreticalMachineRepository = {
-  saveMachineAsync: async (userId: number, theoreticalMachine: TheoreticalMachine): Promise<number> => {
+  saveMachineAsync: async (userId: number, theoreticalMachine: MinifiedTheoreticalMachine): Promise<number> => {
     return await createUserMachine(userId, theoreticalMachine);
   },
   getAllMachinesAsync: async (userId: number): Promise<ITheoreticalMachine[]> => {
@@ -20,7 +20,7 @@ export const theoreticalMachineRepository = {
   updateUserMachineAsync: async (
     userId: number,
     machineId: number,
-    theoreticalMachine: TheoreticalMachine
+    theoreticalMachine: MinifiedTheoreticalMachine
   ): Promise<boolean> => {
     return await updateUserMachine(userId, machineId, theoreticalMachine);
   },

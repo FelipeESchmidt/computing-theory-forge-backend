@@ -5,6 +5,7 @@ import { TheoreticalMachine } from '@/api/theoreticalMachine/theoreticalMachineM
 import { theoreticalMachineRepository } from '@/api/theoreticalMachine/theoreticalMachineRepository';
 import { ResponseStatus, ServiceResponse } from '@/common/models/serviceResponse';
 import { messages } from '@/common/utils/messages';
+import { maximizeMachine, minifyMachine } from '@/common/utils/theoreticalMachine';
 import { logger } from '@/server';
 
 export const theoreticalMachineService = {
@@ -17,7 +18,7 @@ export const theoreticalMachineService = {
       if (!userId) {
         return new ServiceResponse(ResponseStatus.Failed, messages.userNotFound, null, StatusCodes.NOT_FOUND);
       }
-      const insertedId = await theoreticalMachineRepository.saveMachineAsync(userId, theoreticalMachine);
+      const insertedId = await theoreticalMachineRepository.saveMachineAsync(userId, minifyMachine(theoreticalMachine));
       if (!insertedId) {
         throw new Error(messages.machineSaveFailed);
       }
@@ -40,7 +41,13 @@ export const theoreticalMachineService = {
         return new ServiceResponse(ResponseStatus.Failed, messages.userNotFound, null, StatusCodes.NOT_FOUND);
       }
       const machines = await theoreticalMachineRepository.getAllMachinesAsync(userId);
-      return new ServiceResponse(ResponseStatus.Success, messages.machineGetAllSuccessful, machines, StatusCodes.OK);
+      const maximizedMachines = machines.map((machine) => maximizeMachine(machine));
+      return new ServiceResponse(
+        ResponseStatus.Success,
+        messages.machineGetAllSuccessful,
+        maximizedMachines,
+        StatusCodes.OK
+      );
     } catch (ex) {
       const errorMessage = `Error getting all machines: ${(ex as Error).message}`;
       logger.error(errorMessage);
@@ -79,7 +86,7 @@ export const theoreticalMachineService = {
       const isSuccessful = await theoreticalMachineRepository.updateUserMachineAsync(
         userId,
         machineIdAsNumber,
-        theoreticalMachine
+        minifyMachine(theoreticalMachine)
       );
       if (!isSuccessful) {
         throw new Error(messages.machineUpdateFailed);
