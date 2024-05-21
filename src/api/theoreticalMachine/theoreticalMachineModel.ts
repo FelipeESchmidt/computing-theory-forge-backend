@@ -6,8 +6,20 @@ extendZodWithOpenApi(z);
 export type TheoreticalMachine = z.infer<typeof TheoreticalMachineSchema>;
 export const TheoreticalMachineSchema = z.object({
   name: z.string(),
-  machine: z.string(),
+  machine: z.object({
+    recorders: z.array(
+      z.object({
+        name: z.string(),
+        functionalities: z.array(z.number()),
+      })
+    ),
+  }),
 });
+
+export interface MinifiedTheoreticalMachine {
+  name: string;
+  machine: string;
+}
 
 // Input Validation for 'POST /theoretical-machineService/save' endpoint
 export const TheoreticalMachineSaveSchema = z.object({

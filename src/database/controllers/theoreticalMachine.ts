@@ -1,9 +1,12 @@
-import { TheoreticalMachine } from '@/api/theoreticalMachine/theoreticalMachineModel';
+import { MinifiedTheoreticalMachine } from '@/api/theoreticalMachine/theoreticalMachineModel';
 import { ITheoreticalMachine } from '@/database/models/theoreticalMachine';
 import { executeDeleteQuery, executeInsertQuery, executeQuery, executeUpdateQuery } from '@/database/queries';
 import { ETableNames } from '@/database/tables';
 
-export const createUserMachine = async (userId: number, theoreticalMachine: TheoreticalMachine): Promise<number> => {
+export const createUserMachine = async (
+  userId: number,
+  theoreticalMachine: MinifiedTheoreticalMachine
+): Promise<number> => {
   try {
     const query = `INSERT INTO ${ETableNames.THEORETICAL_MACHINE} (userId, name, machine) VALUES (?, ?, ?)`;
     const { insertId } = await executeInsertQuery(query, [userId, theoreticalMachine.name, theoreticalMachine.machine]);
@@ -40,7 +43,7 @@ export const deleteUserMachine = async (userId: number, machineId: number): Prom
 export const updateUserMachine = async (
   userId: number,
   machineId: number,
-  theoreticalMachine: TheoreticalMachine
+  theoreticalMachine: MinifiedTheoreticalMachine
 ): Promise<boolean> => {
   try {
     const query = `UPDATE ${ETableNames.THEORETICAL_MACHINE} SET name = ?, machine = ? WHERE userId = ? AND id = ?`;

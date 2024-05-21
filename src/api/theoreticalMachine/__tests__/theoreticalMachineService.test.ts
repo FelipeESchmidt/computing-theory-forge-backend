@@ -25,7 +25,19 @@ describe('theoreticalMachineService', () => {
 
   const mockTheoreticalMachine: TheoreticalMachine = {
     name: 'Machine 1',
-    machine: 'machine',
+    machine: {
+      recorders: [
+        { name: 'A', functionalities: [1, 2, 4, 5, 7] },
+        { name: 'B', functionalities: [1, 2, 4, 6] },
+        { name: 'C', functionalities: [2, 3, 5, 7] },
+        { name: 'D', functionalities: [2, 4, 5, 7] },
+      ],
+    },
+  };
+
+  const mockMinifiedTheoreticalMachine = {
+    name: 'Machine 1',
+    machine: 'A@1,2,4,5,7|B@1,2,4,6|C@2,3,5,7|D@2,4,5,7',
   };
 
   afterAll(() => {
@@ -96,7 +108,7 @@ describe('theoreticalMachineService', () => {
   describe('getAllMachines', () => {
     it('should return success when getAllMachines is successful', async () => {
       // Arrange
-      (theoreticalMachineRepository.getAllMachinesAsync as Mock).mockReturnValue([mockTheoreticalMachine]);
+      (theoreticalMachineRepository.getAllMachinesAsync as Mock).mockReturnValue([mockMinifiedTheoreticalMachine]);
 
       // Act
       const result = await theoreticalMachineService.getAllMachines(mockAuth.email);
