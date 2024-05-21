@@ -5,7 +5,7 @@ import { TheoreticalMachine } from '@/api/theoreticalMachine/theoreticalMachineM
 import { theoreticalMachineRepository } from '@/api/theoreticalMachine/theoreticalMachineRepository';
 import { ResponseStatus, ServiceResponse } from '@/common/models/serviceResponse';
 import { messages } from '@/common/utils/messages';
-import { maximizeMachine, minifyMachine } from '@/common/utils/theoreticalMachine';
+import { IReturnedTheoreticalMachine, maximizeMachine, minifyMachine } from '@/common/utils/theoreticalMachine';
 import { logger } from '@/server';
 
 export const theoreticalMachineService = {
@@ -34,7 +34,7 @@ export const theoreticalMachineService = {
       return new ServiceResponse(ResponseStatus.Failed, errorMessage, null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   },
-  getAllMachines: async (email: string): Promise<ServiceResponse<TheoreticalMachine[] | null>> => {
+  getAllMachines: async (email: string): Promise<ServiceResponse<IReturnedTheoreticalMachine[] | null>> => {
     try {
       const userId = await authRepository.getUserIdByEmailAsync(email);
       if (!userId) {

@@ -1,6 +1,14 @@
 import { MinifiedTheoreticalMachine, TheoreticalMachine } from '@/api/theoreticalMachine/theoreticalMachineModel';
+import { ITheoreticalMachine } from '@/database/models/theoreticalMachine';
 
 import { messages } from './messages';
+
+export interface IReturnedTheoreticalMachine extends TheoreticalMachine {
+  id: number;
+  userId: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export const minifyMachine = ({ machine, name }: TheoreticalMachine): MinifiedTheoreticalMachine => {
   try {
@@ -17,7 +25,11 @@ export const minifyMachine = ({ machine, name }: TheoreticalMachine): MinifiedTh
   }
 };
 
-export const maximizeMachine = ({ machine, name }: MinifiedTheoreticalMachine): TheoreticalMachine => {
+export const maximizeMachine = ({
+  machine,
+  name,
+  ...otherMachineProps
+}: ITheoreticalMachine): IReturnedTheoreticalMachine => {
   try {
     const maximizedRecorders = machine.split('|').map((machine) => {
       const [name, functionalities] = machine.split('@');
@@ -29,6 +41,7 @@ export const maximizeMachine = ({ machine, name }: MinifiedTheoreticalMachine): 
     });
 
     return {
+      ...otherMachineProps,
       name,
       machine: {
         recorders: maximizedRecorders,
