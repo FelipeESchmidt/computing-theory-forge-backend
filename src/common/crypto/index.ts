@@ -8,10 +8,3 @@ export const encryptPassword = (password: string): string => {
   encryptedPassword += cipher.final('hex');
   return encryptedPassword;
 };
-
-export const decryptPassword = (encryptedPassword: string): string => {
-  const decipher = crypto.createDecipher('aes-256-cbc', env.ENCRYPTION_KEY);
-  let decryptedPassword = decipher.update(encryptedPassword, 'hex', 'utf8');
-  decryptedPassword += decipher.final('utf8');
-  return decryptedPassword;
-};
