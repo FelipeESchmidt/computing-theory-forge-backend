@@ -13,7 +13,7 @@ export interface IReturnedTheoreticalMachine extends TheoreticalMachine {
 export const minifyMachine = ({ machine, name }: TheoreticalMachine): MinifiedTheoreticalMachine => {
   try {
     const machineMinified = machine.recorders
-      .map(({ name: functionalityName, functionalities }) => `${functionalityName}@${functionalities.join(',')}`)
+      .map(({ name: recorderName, functionalities }) => `${recorderName}@${functionalities.join(',')}`)
       .join('|') as MinifiedTheoreticalMachine['machine'];
 
     return {
