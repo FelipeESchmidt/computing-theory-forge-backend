@@ -15,7 +15,7 @@ export const theoreticalMachineRouter: Router = (() => {
 
   theoreticalMachineRegistry.registerPath({
     method: 'post',
-    path: '/theoretical-machineService/save-machine',
+    path: '/theoretical-machine/save-machine',
     tags: ['TheoreticalMachineService'],
     request: { body: { content: { 'application/json': { schema: TheoreticalMachineSaveSchema } } } },
     responses: createApiResponse(z.string(), 'Success'),
@@ -33,7 +33,7 @@ export const theoreticalMachineRouter: Router = (() => {
 
   theoreticalMachineRegistry.registerPath({
     method: 'get',
-    path: '/theoretical-machineService/get-all-machines',
+    path: '/theoretical-machine/get-all-machines',
     tags: ['TheoreticalMachineService'],
     responses: createApiResponse(z.string(), 'Success'),
   });
@@ -45,7 +45,7 @@ export const theoreticalMachineRouter: Router = (() => {
 
   theoreticalMachineRegistry.registerPath({
     method: 'delete',
-    path: '/theoretical-machineService/delete-machine/:id',
+    path: '/theoretical-machine/delete-machine/:id',
     tags: ['TheoreticalMachineService'],
     responses: createApiResponse(z.string(), 'Success'),
   });
@@ -57,7 +57,7 @@ export const theoreticalMachineRouter: Router = (() => {
 
   theoreticalMachineRegistry.registerPath({
     method: 'put',
-    path: '/theoretical-machineService/update-machine/:id',
+    path: '/theoretical-machine/update-machine/:id',
     tags: ['TheoreticalMachineService'],
     request: { body: { content: { 'application/json': { schema: TheoreticalMachineSaveSchema } } } },
     responses: createApiResponse(z.string(), 'Success'),

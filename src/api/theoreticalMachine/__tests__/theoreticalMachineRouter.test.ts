@@ -55,7 +55,7 @@ describe('Auth API Endpoints', () => {
     it('should return success when saveMachine is successful', async () => {
       // Act
       const response = await request(app)
-        .post('/theoretical-machineService/save-machine')
+        .post('/theoretical-machine/save-machine')
         .send(mockTheoreticalMachine)
         .set('Content-Type', 'application/json')
         .set('Authorization', 'Bearer token');
@@ -73,7 +73,7 @@ describe('Auth API Endpoints', () => {
 
       // Act
       const response = await request(app)
-        .post('/theoretical-machineService/save-machine')
+        .post('/theoretical-machine/save-machine')
         .send(mockTheoreticalMachine)
         .set('Content-Type', 'application/json')
         .set('Authorization', 'Bearer token');
@@ -90,7 +90,7 @@ describe('Auth API Endpoints', () => {
 
       // Act
       const response = await request(app)
-        .post('/theoretical-machineService/save-machine')
+        .post('/theoretical-machine/save-machine')
         .send(mockTheoreticalMachine)
         .set('Content-Type', 'application/json')
         .set('Authorization', 'Bearer token');
@@ -109,7 +109,7 @@ describe('Auth API Endpoints', () => {
 
       // Act
       const response = await request(app)
-        .post('/theoretical-machineService/save-machine')
+        .post('/theoretical-machine/save-machine')
         .send(mockTheoreticalMachine)
         .set('Content-Type', 'application/json')
         .set('Authorization', 'Bearer token');
@@ -128,7 +128,7 @@ describe('Auth API Endpoints', () => {
 
       // Act
       const response = await request(app)
-        .get('/theoretical-machineService/get-all-machines')
+        .get('/theoretical-machine/get-all-machines')
         .set('Authorization', 'Bearer token');
 
       // Assert
@@ -146,7 +146,7 @@ describe('Auth API Endpoints', () => {
 
       // Act
       const response = await request(app)
-        .get('/theoretical-machineService/get-all-machines')
+        .get('/theoretical-machine/get-all-machines')
         .set('Authorization', 'Bearer token');
 
       // Assert
@@ -161,7 +161,7 @@ describe('Auth API Endpoints', () => {
 
       // Act
       const response = await request(app)
-        .get('/theoretical-machineService/get-all-machines')
+        .get('/theoretical-machine/get-all-machines')
         .set('Authorization', 'Bearer token');
 
       // Assert
@@ -178,7 +178,7 @@ describe('Auth API Endpoints', () => {
 
       // Act
       const response = await request(app)
-        .get('/theoretical-machineService/get-all-machines')
+        .get('/theoretical-machine/get-all-machines')
         .set('Authorization', 'Bearer token');
 
       // Assert
@@ -192,7 +192,7 @@ describe('Auth API Endpoints', () => {
     it('should return success when deleteMachine is successful', async () => {
       // Act
       const response = await request(app)
-        .delete('/theoretical-machineService/delete-machine/1')
+        .delete('/theoretical-machine/delete-machine/1')
         .set('Authorization', 'Bearer token');
 
       // Assert
@@ -207,7 +207,7 @@ describe('Auth API Endpoints', () => {
 
       // Act
       const response = await request(app)
-        .delete('/theoretical-machineService/delete-machine/1')
+        .delete('/theoretical-machine/delete-machine/1')
         .set('Authorization', 'Bearer token');
 
       // Assert
@@ -222,7 +222,7 @@ describe('Auth API Endpoints', () => {
 
       // Act
       const response = await request(app)
-        .delete('/theoretical-machineService/delete-machine/1')
+        .delete('/theoretical-machine/delete-machine/1')
         .set('Authorization', 'Bearer token');
 
       // Assert
@@ -239,7 +239,7 @@ describe('Auth API Endpoints', () => {
 
       // Act
       const response = await request(app)
-        .delete('/theoretical-machineService/delete-machine/1')
+        .delete('/theoretical-machine/delete-machine/1')
         .set('Authorization', 'Bearer token');
 
       // Assert
@@ -253,7 +253,7 @@ describe('Auth API Endpoints', () => {
     it('should return success when updateMachine is successful', async () => {
       // Act
       const response = await request(app)
-        .put('/theoretical-machineService/update-machine/1')
+        .put('/theoretical-machine/update-machine/1')
         .send(mockTheoreticalMachine)
         .set('Content-Type', 'application/json')
         .set('Authorization', 'Bearer token');
@@ -270,7 +270,7 @@ describe('Auth API Endpoints', () => {
 
       // Act
       const response = await request(app)
-        .put('/theoretical-machineService/update-machine/1')
+        .put('/theoretical-machine/update-machine/1')
         .send(mockTheoreticalMachine)
         .set('Content-Type', 'application/json')
         .set('Authorization', 'Bearer token');
@@ -287,7 +287,7 @@ describe('Auth API Endpoints', () => {
 
       // Act
       const response = await request(app)
-        .put('/theoretical-machineService/update-machine/1')
+        .put('/theoretical-machine/update-machine/1')
         .send(mockTheoreticalMachine)
         .set('Content-Type', 'application/json')
         .set('Authorization', 'Bearer token');
@@ -306,7 +306,7 @@ describe('Auth API Endpoints', () => {
 
       // Act
       const response = await request(app)
-        .put('/theoretical-machineService/update-machine/1')
+        .put('/theoretical-machine/update-machine/1')
         .send(mockTheoreticalMachine)
         .set('Content-Type', 'application/json')
         .set('Authorization', 'Bearer token');

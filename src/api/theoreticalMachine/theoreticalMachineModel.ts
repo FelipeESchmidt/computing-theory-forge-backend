@@ -21,7 +21,7 @@ export interface MinifiedTheoreticalMachine {
   machine: string;
 }
 
-// Input Validation for 'POST /theoretical-machineService/save' endpoint
+// Input Validation for 'POST /theoretical-machine/save' endpoint
 export const TheoreticalMachineSaveSchema = z.object({
   body: z.object({
     name: TheoreticalMachineSchema.shape.name,
