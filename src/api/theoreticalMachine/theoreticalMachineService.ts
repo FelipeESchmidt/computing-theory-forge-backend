@@ -83,6 +83,10 @@ export const theoreticalMachineService = {
         return new ServiceResponse(ResponseStatus.Failed, messages.userNotFound, null, StatusCodes.NOT_FOUND);
       }
       const machineIdAsNumber = parseInt(machineId, 10);
+      const machineExists = await theoreticalMachineRepository.getMachineByIdAsync(userId, machineIdAsNumber);
+      if (!machineExists) {
+        return new ServiceResponse(ResponseStatus.Failed, messages.machineNotFound, null, StatusCodes.NOT_FOUND);
+      }
       const isSuccessful = await theoreticalMachineRepository.updateUserMachineAsync(
         userId,
         machineIdAsNumber,
