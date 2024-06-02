@@ -31,8 +31,8 @@ export const maximizeMachine = ({
   ...otherMachineProps
 }: ITheoreticalMachine): IReturnedTheoreticalMachine => {
   try {
-    const maximizedRecorders = machine.split('|').map((machine) => {
-      const [name, functionalities] = machine.split('@');
+    const maximizedRecorders = machine.split('|').map((recorder) => {
+      const [name, functionalities] = recorder.split('@');
 
       return {
         name,
