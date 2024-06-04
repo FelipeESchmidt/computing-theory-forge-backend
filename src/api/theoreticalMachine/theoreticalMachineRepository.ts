@@ -17,6 +17,10 @@ export const theoreticalMachineRepository = {
   deleteMachineAsync: async (userId: number, machineId: number): Promise<boolean> => {
     return await deleteUserMachine(userId, machineId);
   },
+  getMachineByIdAsync: async (userId: number, machineId: number): Promise<ITheoreticalMachine | null> => {
+    const machines = await getUserMachines(userId);
+    return machines.find((machine) => machine.id === machineId) || null;
+  },
   updateUserMachineAsync: async (
     userId: number,
     machineId: number,

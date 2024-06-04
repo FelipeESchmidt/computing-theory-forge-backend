@@ -49,6 +49,7 @@ describe('theoreticalMachineService', () => {
     (theoreticalMachineRepository.saveMachineAsync as Mock).mockReturnValue(1);
     (theoreticalMachineRepository.deleteMachineAsync as Mock).mockReturnValue(true);
     (theoreticalMachineRepository.updateUserMachineAsync as Mock).mockReturnValue(true);
+    (theoreticalMachineRepository.getMachineByIdAsync as Mock).mockReturnValue(true);
   });
 
   describe('saveMachine', () => {
@@ -239,6 +240,19 @@ describe('theoreticalMachineService', () => {
       expect(result.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
       expect(result.success).toBeFalsy();
       expect(result.message).toContain('Error updating machine:');
+    });
+
+    it('should return error when machine is not found', async () => {
+      // Arrange
+      (theoreticalMachineRepository.getMachineByIdAsync as Mock).mockReturnValue(null);
+
+      // Act
+      const result = await theoreticalMachineService.updateMachine(mockTheoreticalMachine, mockAuth.email, '1');
+
+      // Assert
+      expect(result.statusCode).toEqual(StatusCodes.NOT_FOUND);
+      expect(result.success).toBeFalsy();
+      expect(result.message).toContain(messages.machineNotFound);
     });
   });
 });

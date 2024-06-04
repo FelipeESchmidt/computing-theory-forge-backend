@@ -14,7 +14,7 @@ vi.mock('@/api/theoreticalMachine/theoreticalMachineRepository');
 vi.mock('@/api/auth/authRepository');
 vi.mock('@/common/token/verify');
 
-describe('Auth API Endpoints', () => {
+describe('Theoretical Machine API Endpoints', () => {
   const mockAuth: Auth = {
     email: 'email@email.com',
     password: 'password',
@@ -49,6 +49,7 @@ describe('Auth API Endpoints', () => {
     (theoreticalMachineRepository.saveMachineAsync as Mock).mockReturnValue(1);
     (theoreticalMachineRepository.deleteMachineAsync as Mock).mockReturnValue(true);
     (theoreticalMachineRepository.updateUserMachineAsync as Mock).mockReturnValue(true);
+    (theoreticalMachineRepository.getMachineByIdAsync as Mock).mockReturnValue(true);
   });
 
   describe('POST theoretical-machineService/save-machine', () => {
@@ -315,6 +316,23 @@ describe('Auth API Endpoints', () => {
       expect(response.status).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
       expect(response.body.success).toBeFalsy();
       expect(response.body.message).toContain('Error updating machine');
+    });
+
+    it('should return error when updateMachine does not find the machine', async () => {
+      // Arrange
+      (theoreticalMachineRepository.getMachineByIdAsync as Mock).mockReturnValue(false);
+
+      // Act
+      const response = await request(app)
+        .put('/theoretical-machine/update-machine/1')
+        .send(mockTheoreticalMachine)
+        .set('Content-Type', 'application/json')
+        .set('Authorization', 'Bearer token');
+
+      // Assert
+      expect(response.status).toEqual(StatusCodes.NOT_FOUND);
+      expect(response.body.success).toBeFalsy();
+      expect(response.body.message).toContain(messages.machineNotFound);
     });
   });
 });

@@ -26,6 +26,7 @@ export const messages = {
   machineSaveSuccessful: 'MACHINE_SAVE_SUCCESSFUL',
   machineGetAllSuccessful: 'MACHINE_GET_ALL_SUCCESSFUL',
   machineDeleteFailed: 'MACHINE_DELETE_FAILED',
+  machineNotFound: 'MACHINE_NOT_FOUND',
   machineDeleteSuccessful: 'MACHINE_DELETE_SUCCESSFUL',
   machineUpdateFailed: 'MACHINE_UPDATE_FAILED',
   machineUpdateSuccessful: 'MACHINE_UPDATE_SUCCESSFUL',
