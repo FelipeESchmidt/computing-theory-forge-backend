@@ -14,7 +14,7 @@ vi.mock('@/api/theoreticalMachine/theoreticalMachineRepository');
 vi.mock('@/api/auth/authRepository');
 vi.mock('@/common/token/verify');
 
-describe('Auth API Endpoints', () => {
+describe('Theoretical Machine API Endpoints', () => {
   const mockAuth: Auth = {
     email: 'email@email.com',
     password: 'password',
