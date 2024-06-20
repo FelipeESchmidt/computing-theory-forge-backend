@@ -110,7 +110,7 @@ As principais dependências do projeto incluem:
 
 #### Criação de Máquina
 
-- **Rota**: `/machines`
+- **Rota**: `/theoretical-machine/save-machine`
 - **Método**: `POST`
 - **Descrição**: Cria uma nova máquina teórica.
 - **Campos**: `nome`, `estruturaDaMaquina`
@@ -118,7 +118,7 @@ As principais dependências do projeto incluem:
 
 #### Atualização de Máquina
 
-- **Rota**: `/machines/:id`
+- **Rota**: `/theoretical-machine/update-machine/:id`
 - **Método**: `PUT`
 - **Descrição**: Atualiza uma máquina existente.
 - **Campos**: `nome`, `estruturaDaMaquina`
@@ -126,14 +126,14 @@ As principais dependências do projeto incluem:
 
 #### Remoção de Máquina
 
-- **Rota**: `/machines/:id`
+- **Rota**: `/theoretical-machine/delete-machine/:id`
 - **Método**: `DELETE`
 - **Descrição**: Remove uma máquina existente.
 - **Resposta**: `200 OK` ou erro de validação.
 
 #### Busca de Máquinas
 
-- **Rota**: `/machines`
+- **Rota**: `/theoretical-machine/get-all-machines`
 - **Método**: `GET`
 - **Descrição**: Busca todas as máquinas do usuário logado.
 - **Resposta**: `200 OK` com lista de máquinas.
