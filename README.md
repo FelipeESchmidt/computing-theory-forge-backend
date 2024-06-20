@@ -1,104 +1,178 @@
-# 🚀 Express TypeScript Boilerplate 2024
+# Projeto: Gerenciador de Máquinas Teóricas
 
-[![Build Express Application](https://github.com/edwinhern/express-typescript-2024/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/edwinhern/express-typescript-2024/actions/workflows/build.yml)
-[![CodeQL](https://github.com/edwinhern/express-typescript-2024/actions/workflows/codeql.yml/badge.svg?branch=master)](https://github.com/edwinhern/express-typescript-2024/actions/workflows/codeql.yml)
-[![Docker Image CI](https://github.com/edwinhern/express-typescript-2024/actions/workflows/docker-image.yml/badge.svg?branch=master)](https://github.com/edwinhern/express-typescript-2024/actions/workflows/docker-image.yml)
-[![Release](https://github.com/edwinhern/express-typescript-2024/actions/workflows/release.yml/badge.svg?branch=master)](https://github.com/edwinhern/express-typescript-2024/actions/workflows/release.yml)
+Este projeto é uma aplicação para gerenciar máquinas teóricas, especificamente voltada para estudantes e entusiastas de máquinas universais, permitindo a criação, programação, execução e salvamento dessas máquinas.
 
-## 🌟 Introduction
+## Índice
 
-Welcome to the Express TypeScript Boilerplate 2024 – a streamlined, efficient, and scalable foundation for building powerful backend services. This boilerplate merges modern tools and practices in Express.js and TypeScript, enhancing productivity, code quality, and performance.
+- [Instalação](#instalação)
+- [Configuração](#configuração)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Dependências](#dependências)
+- [Rotas da API](#rotas-da-api)
+- [Middlewares](#middlewares)
+- [Testes](#testes)
+- [Contribuição](#contribuição)
+- [Licença](#licença)
 
-## 💡 Motivation and Intentions
+## Instalação
 
-Developed to streamline backend development, this boilerplate is your solution for:
+Para começar, clone o repositório e instale as dependências:
 
-- ✨ Reducing setup time for new projects.
-- 📊 Ensuring code consistency and quality.
-- ⚡ Facilitating rapid development with cutting-edge tools.
-- 🛡️ Encouraging best practices in security, testing, and performance.
-
-## 🚀 Features
-
-- 📁 Modular Structure: Organized by feature for easy navigation and scalability.
-- 💨 Faster Execution with tsx: Rapid TypeScript execution with esbuild, complemented by tsc for type checking.
-- 🌐 Stable Node Environment: Latest LTS Node version in .nvmrc.
-- 🔧 Simplified Environment Variables with Envalid: Centralized and easy-to-manage configuration.
-- 🔗 Path Aliases: Cleaner code with shortcut imports.
-- 🔄 Dependabot Integration: Automatic updates for secure and up-to-date dependencies.
-- 🔒 Security: Helmet for HTTP header security and CORS setup.
-- 📊 Logging: Efficient logging with pino-http.
-- 🧪 Comprehensive Testing: Robust setup with Vitest and Supertest.
-- 🔑 Code Quality Assurance: Husky and lint-staged for consistent quality.
-- ✅ Unified Code Style: ESLint and Prettier for a consistent coding standard.
-- 📃 API Response Standardization: ServiceResponse class for consistent API responses.
-- 🐳 Docker Support: Ready for containerization and deployment.
-- 📝 Input Validation with Zod: Strongly typed request validation using Zod.
-- 🧩 API Spec Generation: Automated OpenAPI specification generation from Zod schemas to ensure up-to-date and accurate API documentation.
-
-## 🛠️ Getting Started
-
-### Step 1: 🚀 Initial Setup
-
-- Clone the repository: `git clone https://github.com/edwinhern/express-typescript-2024.git`
-- Navigate: `cd express-typescript-2024`
-- Install dependencies: `npm ci`
-
-### Step 2: ⚙️ Environment Configuration
-
-- Create `.env`: Copy `.env.template` to `.env`
-- Update `.env`: Fill in necessary environment variables
-
-### Step 3: 🏃‍♂️ Running the Project
-
-- Development Mode: `npm run dev`
-- Building: `npm run build`
-- Production Mode: Set `.env` to `NODE_ENV="production"` then `npm run build && npm run start`
-
-## 📁 Project Structure
-
-```
-.
-├── api
-│   ├── healthCheck
-│   │   ├── __tests__
-│   │   │   └── healthCheckRouter.test.ts
-│   │   └── healthCheckRouter.ts
-│   └── user
-│       ├── __tests__
-│       │   ├── userRouter.test.ts
-│       │   └── userService.test.ts
-│       ├── userModel.ts
-│       ├── userRepository.ts
-│       ├── userRouter.ts
-│       └── userService.ts
-├── api-docs
-│   ├── __tests__
-│   │   └── openAPIRouter.test.ts
-│   ├── openAPIDocumentGenerator.ts
-│   ├── openAPIResponseBuilders.ts
-│   └── openAPIRouter.ts
-├── common
-│   ├── __tests__
-│   │   ├── errorHandler.test.ts
-│   │   └── requestLogger.test.ts
-│   ├── middleware
-│   │   ├── errorHandler.ts
-│   │   ├── rateLimiter.ts
-│   │   └── requestLogger.ts
-│   ├── models
-│   │   └── serviceResponse.ts
-│   └── utils
-│       ├── commonValidation.ts
-│       ├── envConfig.ts
-│       └── httpHandlers.ts
-├── index.ts
-└── server.ts
-
+```bash
+git clone https://github.com/FelipeESchmidt/computing-theory-forge-backend.git
+cd computing-theory-forge-backend
+npm install
 ```
 
-## 🤝 Feedback and Contributions
+## Configuração
 
-We'd love to hear your feedback and suggestions for further improvements. Feel free to contribute and join us in making backend development cleaner and faster!
+Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis de ambiente:
 
-🎉 Happy coding!
+```env
+NODE_ENV=development
+HOST=localhost
+PORT=3000
+CORS_ORIGIN=http://localhost:3000
+COMMON_RATE_LIMIT_MAX_REQUESTS=1000
+COMMON_RATE_LIMIT_WINDOW_MS=1000
+JWT_SECRET=seuSegredoJWT
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=seuUsuarioDB
+DB_PASS=suaSenhaDB
+DB_NAME=nomeDoSeuDB
+ENCRYPTION_KEY=suaChaveDeCriptografia
+```
+
+## Estrutura do Projeto
+
+O projeto segue uma estrutura organizada para manter o código limpo e fácil de entender:
+
+```bash
+src/
+  api/
+  api-docs/
+  common/
+    crypto/
+    middlewares/
+    models/
+    token/
+    utils/
+  database/
+  index.ts
+```
+
+## Dependências
+
+As principais dependências do projeto incluem:
+
+- Node.js
+- TypeScript
+- Express
+- dotenv
+- envalid
+- bcrypt
+- jsonwebtoken
+- pino-http
+- express-rate-limit
+- helmet
+- body-parser
+- swagger-ui-express
+
+## Rotas da API
+
+### Autenticação
+
+#### Registro de Usuário
+
+- **Rota**: `/auth/register`
+- **Método**: `POST`
+- **Descrição**: Registra um novo usuário.
+- **Campos**: `nome`, `email`, `senha`, `confirmacaoSenha`
+- **Resposta**: `201 Created` ou erro de campo obrigatório/conflito.
+
+#### Login de Usuário
+
+- **Rota**: `/auth/login`
+- **Método**: `POST`
+- **Descrição**: Realiza o login do usuário.
+- **Campos**: `email`, `senha`
+- **Resposta**: `200 OK` com token JWT ou erro de autenticação.
+
+#### Atualização de Usuário
+
+- **Rota**: `/auth/update`
+- **Método**: `PUT`
+- **Descrição**: Atualiza os dados do usuário logado.
+- **Campos**: `nome`, `senhaAntiga`, `novaSenha`, `confirmacaoNovaSenha`
+- **Resposta**: `200 OK` ou erro de validação.
+
+### Máquinas Teóricas
+
+#### Criação de Máquina
+
+- **Rota**: `/machines`
+- **Método**: `POST`
+- **Descrição**: Cria uma nova máquina teórica.
+- **Campos**: `nome`, `estruturaDaMaquina`
+- **Resposta**: `201 Created` com ID da máquina.
+
+#### Atualização de Máquina
+
+- **Rota**: `/machines/:id`
+- **Método**: `PUT`
+- **Descrição**: Atualiza uma máquina existente.
+- **Campos**: `nome`, `estruturaDaMaquina`
+- **Resposta**: `200 OK` ou erro de validação.
+
+#### Remoção de Máquina
+
+- **Rota**: `/machines/:id`
+- **Método**: `DELETE`
+- **Descrição**: Remove uma máquina existente.
+- **Resposta**: `200 OK` ou erro de validação.
+
+#### Busca de Máquinas
+
+- **Rota**: `/machines`
+- **Método**: `GET`
+- **Descrição**: Busca todas as máquinas do usuário logado.
+- **Resposta**: `200 OK` com lista de máquinas.
+
+## Middlewares
+
+### Autenticação
+
+Valida se a requisição possui um token JWT válido, garantindo o acesso a rotas privadas.
+
+### Segurança
+
+Utiliza `helmet` para proteger os headers HTTP e `express-rate-limit` para limitar a taxa de requisições e prevenir ataques DoS.
+
+### Logging
+
+Utiliza `pino-http` para registrar detalhes das requisições e respostas HTTP.
+
+### Body Parser
+
+Utiliza `body-parser` para analisar e processar o corpo das requisições HTTP, facilitando o acesso aos dados enviados pelos clientes.
+
+## Testes
+
+Para garantir a integridade do código, foram implementados testes automatizados utilizando `vitest` e `supertest`. Esses testes validam os serviços e rotas da aplicação.
+
+### Execução dos Testes
+
+```bash
+yarn test:dev
+```
+
+Os testes são integrados com a ferramenta `Husky`, garantindo que eles sejam executados antes de cada commit ou push, mantendo a qualidade do código.
+
+## Licença
+
+Este projeto está licenciado sob a [MIT License](LICENSE).
+
+---
+
+Esperamos que esta aplicação seja útil para estudantes e entusiastas da teoria da computação, proporcionando uma plataforma prática e acessível para o estudo de máquinas teóricas.
