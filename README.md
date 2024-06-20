@@ -11,7 +11,6 @@ Este projeto é uma aplicação para gerenciar máquinas teóricas, especificame
 - [Rotas da API](#rotas-da-api)
 - [Middlewares](#middlewares)
 - [Testes](#testes)
-- [Contribuição](#contribuição)
 - [Licença](#licença)
 
 ## Instalação
